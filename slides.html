@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style>
+html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+body {
+	font: 36px Arial;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+	background-color: #ddd;
+}
+h1 {
+	font-size: 72px;
+}
+h2 {
+	font-size: 60px;
+}
+a {
+	color: hsl(240, 100%, 50%);
+	text-decoration: none;
+}
+a:visited {
+	color: hsl(240, 100%, 50%);
+}
+#slides {
+	position: relative;
+	margin: 2.5% 5%;
+	height: 90%;
+	width: 90%;
+	-webkit-perspective: 500;
+}
+#slides>div {
+	background-color: #fff;
+	-webkit-transition: margin-left .3s ease;
+	transition: all .3s ease;
+
+	z-index: 10;
+	border-radius: 20px;
+	box-shadow: 0px 10px 10px #ccc;
+
+	position: absolute;
+	top: 0;
+	margin-left: -102%;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+
+	text-align: center;
+}
+#slides>.active~div {
+	z-index: 10;
+	margin-left: 102%;
+}
+#slides>.active {
+	z-index: 20;
+	margin-left: 0;
+}
+#slides>div>div {
+	padding: 1em;
+}
+</style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script>
+
+(function(){
+
+slides = this.slides = {
+	next: function() {
+		var active = $('.active'), next = active.next();
+		if( next.length ) {
+			active.add(next).toggleClass('active');
+		}
+	},
+	prev: function() {
+		var active = $('.active'), prev = active.prev();
+		if( prev.length ) {
+			active.add(prev).toggleClass('active');
+		}
+	}
+};
+
+document.addEventListener('keyup', function(e) {
+	switch(e.keyCode) {
+		case 39: slides.next(); break;
+		case 37: slides.prev(); break;
+	}
+});
+
+}).call(window);
+
+</script>
+</head>
+<body>
+<div id="slides">
+
+<div id="1" class="active"><div>
+	<h1>Version Control with Git</h1>
+	<p>Adam Backstrom</p>
+
+	<p>
+		<a href="mailto:ambackstrom@plymouth.edu">ambackstrom@plymouth.edu</a><br>
+		<a href="http://twitter.com/abackstrom">@abackstrom</a>
+	</p>
+</div></div>
+
+<div id="2"><div>
+	<ul>
+		<li>
+	</ul>
+</div></div>
+
+<div id="3"><div>
+<p>Do you write PHP?</p>
+<pre>$var = foo;</pre>
+</div></div>
+
+</div>
+</body>
+</html>
