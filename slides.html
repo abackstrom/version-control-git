@@ -1,127 +1,142 @@
-<!DOCTYPE HTML>
-<html lang="en">
+<!DOCTYPE html>
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+<html>
 <head>
-<meta charset="UTF-8">
-<title></title>
+<title>Version Control</title>
+<meta charset="utf-8">
+<script src="slides.js"></script>
 <style>
-html {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-}
-body {
-	font: 36px Arial;
-	height: 100%;
-	padding: 0;
-	margin: 0;
-	overflow: hidden;
-	background-color: #ddd;
-}
-h1 {
-	font-size: 72px;
-}
-h2 {
-	font-size: 60px;
-}
-a {
-	color: hsl(240, 100%, 50%);
-	text-decoration: none;
-}
-a:visited {
-	color: hsl(240, 100%, 50%);
-}
-#slides {
-	position: relative;
-	margin: 2.5% 5%;
-	height: 90%;
-	width: 90%;
-	-webkit-perspective: 500;
-}
-#slides>div {
-	background-color: #fff;
-	-webkit-transition: margin-left .3s ease;
-	transition: all .3s ease;
-
-	z-index: 10;
-	border-radius: 20px;
-	box-shadow: 0px 10px 10px #ccc;
-
-	position: absolute;
-	top: 0;
-	margin-left: -102%;
-	width: 100%;
-	height: 100%;
-	padding: 0;
-
-	text-align: center;
-}
-#slides>.active~div {
-	z-index: 10;
-	margin-left: 102%;
-}
-#slides>.active {
-	z-index: 20;
-	margin-left: 0;
-}
-#slides>div>div {
-	padding: 1em;
-}
+.ins { background-color: hsla(120, 50%, 50%, .2); }
+.del { background-color: hsla(0, 50%, 50%, .2); }
+.input { font-weight: bold; }
 </style>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-<script>
-
-(function(){
-
-slides = this.slides = {
-	next: function() {
-		var active = $('.active'), next = active.next();
-		if( next.length ) {
-			active.add(next).toggleClass('active');
-		}
-	},
-	prev: function() {
-		var active = $('.active'), prev = active.prev();
-		if( prev.length ) {
-			active.add(prev).toggleClass('active');
-		}
-	}
-};
-
-document.addEventListener('keyup', function(e) {
-	switch(e.keyCode) {
-		case 39: slides.next(); break;
-		case 37: slides.prev(); break;
-	}
-});
-
-}).call(window);
-
-</script>
 </head>
-<body>
-<div id="slides">
+<body style="display: none">
+    <section class="slides layout-regular template-default">
+        <article class="fill">
+            <h1>Version Control with Git</h1>
+            <p>
+                Adam Backstrom<br>
+                <a href="mailto:ambackstrom@plymouth.edu">ambackstrom@plymouth.edu</a>
+            </p>
+            <p><a href="http://twitter.com/abackstrom">@abackstrom</a></p>
+        </article>
 
-<div id="1" class="active"><div>
-	<h1>Version Control with Git</h1>
-	<p>Adam Backstrom</p>
+        <article>
+			<h3>diff</h3>
+<pre class="noprettyprint">
+--- a/ext/standard/strnatcmp.c
++++ b/ext/standard/strnatcmp.c
+@@ -105,7 +105,8
+ {
+        unsigned char ca, cb;
+        unsigned int ai, bi;
+<span class="del">-       int fractional, result, leading = true;</span>
+<span class="ins">+       int fractional, result;</span>
+<span class="ins">+       short leading = 1;</span>
+ 
+        ai = bi = 0;
+        while (1) {
+@@ -120,7 +121,7 @@
+                        cb = b[++bi];
+                }
+ 
+<span class="del">-               leading = false;</span>
+<span class="ins">+               leading = 0;</span>
+ 
+                /* process run of digits */
+</pre>
+        </article>
 
-	<p>
-		<a href="mailto:ambackstrom@plymouth.edu">ambackstrom@plymouth.edu</a><br>
-		<a href="http://twitter.com/abackstrom">@abackstrom</a>
-	</p>
-</div></div>
+		<article>
+			<h3>patch</h3>
+<pre class="noprettyprint">
+adam@fsck:~$ <span class="input">patch -p1 < changes.diff</span>
+patching file ext/standard/strnatcmp.c
+Hunk #4 succeeded at 56 (offset -2 lines).
+</pre>
+		</article>
 
-<div id="2"><div>
-	<ul>
-		<li>
-	</ul>
-</div></div>
+		<article>
+			<h3>git</h3>
+			<ul>
+				<li>diff</li>
+				<li>patch</li>
+				<li>history</li>
+				<li>blame</li>
+			</ul>
+		</article>
 
-<div id="3"><div>
-<p>Do you write PHP?</p>
-<pre>$var = foo;</pre>
-</div></div>
+		<article>
+			<q>I'm an egotistical bastard, and I name all my projects after
+			myself. First Linux, now git.</q>
+			<div class="author"><a href="http://en.wikiquote.org/wiki/Linus_Torvalds">Linus Torvalds</a></div>
+		</article>
 
-</div>
-</body>
+		<article>
+			<h2>Why git?</h2>
+		</article>
+
+		<article>
+			<h3>Branching</h3>
+			<p><img height="550" class="centered" src="commits.png"></p>
+		</article>
+
+		<article>
+			<h3>Distributed</h3>
+			<ul>
+				<li>full history in every clone</li>
+				<li>clones are peers</li>
+				<li>push and pull from any repository</li>
+			</ul>
+		</article>
+
+		<article>
+			<h3>Basics</h3>
+			<table>
+			<tr>
+				<td><code>git init</code></td><td>New repository</td></tr>
+				<td><code>git clone</code></td><td>Clone existing repo</td></tr>
+				<td><code>git add <em>file</em></code></td><td>Add files to checkin</td></tr>
+				<td><code>git commit</code></td><td>Commit added files</td></tr>
+				<td><code>git show <em>object</em></code></td><td>New repository</td></tr>
+			</tr>
+			</table>
+		</article>
+
+		<article>
+			<h3>Branching and Merging</h3>
+			<table>
+			<tr>
+				<td><code>git branch</code></td><td>List branches</td></tr>
+				<td><code>git checkout <em>name</em></code></td><td>Switch to branch</td></tr>
+				<td><code>git merge</code></td><td>Merge branch changes</td></tr>
+				<td><code>git pull KWKW</code></td><td>Fetch remote and merge</td></tr>
+				<td><code>git push KWKW</code></td><td>Push new local commits</td></tr>
+			</tr>
+			</table>
+		</article>
+
+		<article>
+			<h3>Your Project</h3>
+			<ul>
+				<li><a href="https://github.com/plymouthstate/Rate-Your-Mate">github.com/plymouthstate/Rate-Your-Mate</a></li>
+				<li><a href="http://bit.ly/rateyourmate">bit.ly/rateyourmate</a></li>
+			</ul>
+		</article>
+    </section>
+
+  </body>
 </html>
+
+<!-- vim:ts=4:sw=4:noet: -->
