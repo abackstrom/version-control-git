@@ -19,6 +19,7 @@
 .ins { background-color: hsla(120, 50%, 50%, .2); }
 .del { background-color: hsla(0, 50%, 50%, .2); }
 .input { font-weight: bold; }
+img { max-width: 100%; }
 </style>
 </head>
 <body style="display: none">
@@ -83,7 +84,7 @@ Hunk #4 succeeded at 56 (offset -2 lines).
 
 		<article>
 			<h3>Branching</h3>
-			<p><img height="550" class="centered" src="commits.png"></p>
+			<p><img height="550" class="centered" src="images/commits.png"></p>
 		</article>
 
 		<article>
@@ -147,9 +148,52 @@ Hunk #4 succeeded at 56 (offset -2 lines).
 				<li><a href="http://help.github.com/git-cheat-sheets/">help.github.com/git-cheat-sheets/</a></li>
 			</ul>
 		</article>
-    </section>
 
-  </body>
+<article>
+<h3>GitX for OS X</h3>
+<p><img src="images/gitx.jpg"></p>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p>Two branches (master and dev) each with a unique commit.
+<p><img src="images/1-start.png"></p>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p><code>(master)$ git merge dev</code></p>
+<p><img src="images/2-merge.png"></p>
+<pre>
+Merge made by recursive.
+ index.php |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+</pre>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p><code>(dev)$ git rebase master</code>
+<p><img src="images/3a-checkout-rebase.png"></p>
+<p><code>(master)$ git merge dev</code>
+<p><img src="images/3b-merge.png"></p>
+<pre>
+Updating ff6103a..bee41c4
+Fast-forward
+ index.php |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+</pre>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p><code>(master)$ git merge --no-ff dev</code>
+<p><img src="images/4a-merge-no-ff.png"></p>
+<p><code>(master)$ git branch -d dev</code>
+<p><img src="images/4b-branch-del.png"></p>
+</article>
+
+</body>
 </html>
 
 <!--
