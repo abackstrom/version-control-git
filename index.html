@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<!--
+  Google HTML5 slide template
+
+  Authors: Luke Mahé (code)
+           Marcin Wichary (code and design)
+           
+           Dominic Mazzoni (browser compatibility)
+           Charles Chen (ChromeVox support)
+
+  URL: http://code.google.com/p/html5slides/
+-->
+<html>
+<head>
+<title>Version Control</title>
+<meta charset="utf-8">
+<script src="js/slides.js"></script>
+<script src="js/raphael-min.js"></script>
+<script src="js/git-canvas.min.js"></script>
+<style>
+.ins { background-color: hsla(120, 50%, 50%, .2); }
+.del { background-color: hsla(0, 50%, 50%, .2); }
+.input { font-weight: bold; }
+.branch {
+	font-weight: 600;
+}
+.branch.master { color: rgb(255, 0, 0); }
+.branch.dev { color: rgb(0, 150, 0); }
+.commits {
+	margin-top: 150px;
+	text-align: center;
+}
+.big {
+	width: 100%;
+}
+.cols_2 {
+	clear: both;
+}
+.cols_2 .row_1 {
+	width: 48%;
+	float: left;
+	margin: 0 1%;
+}
+.cols_2 .row_1:first-child {
+	margin-left: 0;
+}
+.cols_2 .row_1:last-child {
+	margin-right: 0;
+}
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+article > .source {
+	top: auto;
+	bottom: 40px;
+}
+article.fill h2 {
+	position: relative;
+	bottom: auto;
+	background: rgba(255, 255, 255, .75);
+	padding-top: .2em;
+	padding-bottom: .3em;
+	margin-top: 450px;
+	margin-left: -60px;
+	padding-left: 60px;
+	margin-right: -60px;
+	padding-right: 60px;
+}
+</style>
+<script>
+var gitc = new git_canvas( { commits_sep: 80 } );
+</script>
+</head>
+<body style="display: none">
+    <section class="slides layout-regular template-default">
+        <article class="fill">
+            <h1>Version Control with Git</h1>
+            <p>
+                Adam Backstrom<br>
+                <a href="mailto:ambackstrom@plymouth.edu">ambackstrom@plymouth.edu</a>
+            </p>
+            <p><a href="http://twitter.com/abackstrom">@abackstrom</a></p>
+        </article>
+
+        <article>
+			<h3>diff</h3>
+<pre class="noprettyprint">
+--- a/ext/standard/strnatcmp.c
++++ b/ext/standard/strnatcmp.c
+@@ -105,7 +105,8
+ {
+        unsigned char ca, cb;
+        unsigned int ai, bi;
+<span class="del">-       int fractional, result, leading = true;</span>
+<span class="ins">+       int fractional, result;</span>
+<span class="ins">+       short leading = 1;</span>
+ 
+        ai = bi = 0;
+        while (1) {
+@@ -120,7 +121,7 @@
+                        cb = b[++bi];
+                }
+ 
+<span class="del">-               leading = false;</span>
+<span class="ins">+               leading = 0;</span>
+ 
+                /* process run of digits */
+</pre>
+        </article>
+
+		<article>
+			<h3>patch</h3>
+<pre class="noprettyprint">
+adam@fsck:~$ <span class="input">patch -p1 < changes.diff</span>
+patching file ext/standard/strnatcmp.c
+Hunk #4 succeeded at 56 (offset -2 lines).
+</pre>
+	</div>
+</div>
+		</article>
+
+<article>
+<h3>Git</h3>
+<p>A way to manage diffs.</p>
+<p class="commits" id="branching"></p>
+<script>
+gitc.commits([
+	{ hash: '1' },
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'e', branch: 'fixup', parents: [ 'b' ] },
+	{ hash: 'f', parents: [ 'e', 'b' ] },
+	{ hash: 'g', parents: [ 'd', 'f' ] }
+]).draw('branching', { commits_sep: 70 } );
+</script>
+</article>
+
+		<article>
+			<h3>What else?</h3>
+			<ul>
+				<li>full history in every clone</li>
+				<li>clones are peers, related but independent</li>
+				<li>push and pull from any repository branch</li>
+				<li>branching is a way of life</li>
+			</ul>
+		</article>
+
+<article>
+<h3>Complexity</h3>
+<p><img class=big src=images/clones-1.png></p>
+</article>
+
+<article>
+<h3>Complexity</h3>
+<p><img class=big src=images/clones-2.png></p>
+</article>
+
+<article>
+<h3>Complexity</h3>
+<p><img class=centered src=images/clones-3.png></p>
+</article>
+
+<article>
+<h3>Making Commits</h3>
+<p>(master)$</p>
+<p id="making-commits"></p>
+<p>(master)$ vi<br>(master)$ git add</p>
+<p id="making-commits-staging"></p>
+<p>(master)$ git commit</p>
+<p id="making-commits-committed"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c' }
+]).draw('making-commits' );
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c' },
+	{ hash: 'd', staged: true }
+]).draw('making-commits-staging' );
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c' },
+	{ hash: 'd' }
+]).draw('making-commits-committed' );
+</script>
+</article>
+
+<article>
+<img class=centered src=images/git-log-graph.png>
+<div class=source>git log --graph --pretty=oneline --abbrev-commit</div>
+</article>
+
+<article>
+<img class=centered src=images/gitx.png>
+<div class=source><a href=https://github.com/laullon/gitx>github.com/laullon/gitx</a></div>
+</article>
+
+<article>
+<h3>WTF PS1</h3>
+<p>(master)$ git add <!--[<i>--foo</i>]--> <i>input</i></p>
+<ul>
+<li>master -- current branch</li>
+<li>git add -- command</li>
+<!--<li>[<i>--foo</i>] -- optional argument</li>-->
+<li><i>input</i> -- command arguments</li>
+</ul>
+<div class="build">
+<pre>export PS1='$(__git_ps1 "(%s)")\$ '</pre>
+</div>
+</article>
+
+<article>
+<h3>Git vs. Subversion</h3>
+<pre>echo "export EDITOR=vi" >> ~/.bashrc</pre>
+<table>
+	<tr><td style="width: 30%;">svn diff</td><td>git diff</td></tr>
+	<tr><td>svn status</td><td>git status</td></tr>
+	<tr><td>svn rm <i>file</i></td><td>git rm <i>file</i></td></tr>
+	<tr><td>svn add <i>file</i></td><td>git add <i>file</i></td></tr>
+</table>
+</article>
+
+<article>
+<h3>Git vs. Subversion</h3>
+<table>
+	<tr>
+		<td style="width: 30%;">svn commit</td>
+		<td>git commit -av</td>
+	</tr>
+	<tr>
+		<td>svn commit</td>
+		<td>git add<br>git commit -v</td>
+	</tr>
+</table>
+<table>
+	<tr>
+		<td style="width: 30%;">svn up</td>
+		<td>git pull</td>
+	</tr>
+	<tr>
+		<td>svn up</td>
+		<td>git fetch origin<br>git rebase origin/master</td>
+	</tr>
+</table>
+</article>
+
+<article>
+	<h2>In Practice</h2>
+</article>
+
+<article>
+<h3>Workflow</h3>
+<img class="centered" src="images/coding-cycle.png" style="height: 500px; margin-top: 30px;">
+</article>
+
+<article>
+<h3>Workflow</h3>
+<p>
+(master)$ git branch calllog-rest<br>
+(master)$ git checkout calllog-rest<br>
+(calllog-rest)$ vi index.php<br>
+...<br>
+(calllog-rest)$ git commit -av<br>
+(calllog-rest)$ git push origin HEAD
+</p>
+</article>
+
+<article>
+<h3>Code Reviews</h3>
+<p><img src=images/code-review.png></p>
+</article>
+
+<article>
+<h3>Code Reviews</h3>
+<p><img src=images/pull-request.jpg></p>
+</article>
+
+<article>
+<h3>Great Commit Messages</h3>
+<pre>
+Capitalized, short (50 chars or less) summary
+
+Additional information, wrapped to 72 lines. Present tense. GitHub
+will convert Markdown:
+
+- List item
+- With *bold*
+</pre>
+<img src="images/long-message.jpg">
+<div class=source><a href=https://github.com/blog/926-shiny-new-commit-styles>github.com/blog/926-shiny-new-commit-styles</a></div>
+</article>
+
+<article>
+<h3>Scenarios</h3>
+<ul>
+<li>Changes that require end-office approval</li>
+<li>Extended application rewrite</li>
+<li>Quick bug fix</li>
+</ul>
+</article>
+
+<article>
+	<h2>Merging Branches</h2>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p id="two-branches"></p>
+<p>Two branches (<span class="branch master">master</span> and <span class="branch dev">dev</span>) each with a unique commit.</p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'f', branch: 'dev', parents: ['d'] }
+]).draw('two-branches');
+</script>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p>(master)$ git merge dev</p>
+<p id="merge-no-ff"></p>
+<pre>
+Merge made by recursive.
+ index.php |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+</pre>
+<ul>
+	<li>Not fast-forwarded</li>
+	<li>Creates a new merge commit</li>
+</ul>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'f', branch: 'dev', parents: ['d'] },
+	{ hash: 'g', parents: ['e', 'f'] }
+]).draw('merge-no-ff');
+</script>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p id="rebase-pre"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'f', branch: 'dev', parents: ['d'] }
+]).draw('rebase-pre');
+</script>
+<p>(dev)$ git rebase master</p>
+<p id="rebase-post"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'c', branch: 'dev', parents: ['e'] },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'f', branch: 'dev' }
+]).draw('rebase-post');
+</script>
+<p>(master)$ git merge dev</p>
+<p id="rebase-merge"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'e' },
+	{ hash: 'c' },
+	{ hash: 'd' },
+	{ hash: 'f' }
+]).draw('rebase-merge');
+</script>
+<pre>
+Updating ff6103a..bee41c4
+Fast-forward
+ index.php |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+</pre>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p>(dev)$ git rebase master</p>
+<p id="noff-rebase-post"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'c', branch: 'dev', parents: ['e'] },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'f', branch: 'dev' }
+]).draw('noff-rebase-post');
+</script>
+<p>(master)$ git merge --no-ff dev</p>
+<p id="noff-rebase-merge"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'c', branch: 'dev', parents: ['e'] },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'f', branch: 'dev' },
+	{ hash: 'g', parents: ['f', 'e'] }
+]).draw('noff-rebase-merge');
+</script>
+</article>
+
+<article>
+<h3>Merging Branches</h3>
+<p>(dev)$ git rebase master</p>
+<p id="squash-rebase"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'c', branch: 'dev', parents: ['e'] },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'f', branch: 'dev' }
+]).draw('squash-rebase');
+</script>
+<p>(master)$ git merge --squash dev</p>
+<p id="squash-merged"></p>
+<script>
+gitc.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c' },
+	{ hash: 'd' }
+]).draw('squash-merged');
+</script>
+</article>
+
+<article>
+	<h3>Resources</h3>
+	<ul>
+		<li><a href="http://help.github.com/git-cheat-sheets/">help.github.com/git-cheat-sheets/</a></li>
+		<li><a href="http://progit.org/book/">progit.org/book/</a></li>
+		<li><a href="http://gitref.org/">gitref.org</a></li>
+	</ul>
+</article>
+
+
+</body>
+</html>
+
+<!--
+vim:ts=4:sw=4:noet:
+-->

@@ -80,10 +80,12 @@ body {
   box-shadow: 0 2px 6px rgba(0, 0, 0, .1);
   border: 1px solid rgba(0, 0, 0, .3);
 
-  transition: transform .3s ease-out;
-  -o-transition: -o-transform .3s ease-out;
-  -moz-transition: -moz-transform .3s ease-out;
-  -webkit-transition: -webkit-transform .3s ease-out;
+  /*
+  transition: transform .1s ease-out;
+  -o-transition: -o-transform .1s ease-out;
+  -moz-transition: -moz-transform .1s ease-out;
+  -webkit-transition: -webkit-transform .1s ease-out;
+  */
 }
 .slides.layout-widescreen > article {
   margin-left: -550px;
@@ -97,7 +99,7 @@ body {
 }
 
 .slides.template-default > article:not(.nobackground):not(.biglogo) {
-  background: url(images/google-logo-small.png) 710px 625px no-repeat;  
+  /* background: url(images/google-logo-small.png) 710px 625px no-repeat;  */
   
   background-color: white;  
 } 
@@ -155,7 +157,7 @@ body {
 /* Slide styles */
 
 .slides.template-default article.biglogo {
-  background: white url(images/google-logo.png) 50% 50% no-repeat;
+  /* background: white url(images/google-logo.png) 50% 50% no-repeat; */
 }
 
 .slides.template-io2011 article.biglogo {
@@ -571,12 +573,14 @@ article.smaller q::after {
 
 /* Builds */
 
+/*
 .build > * {
-  transition: opacity 0.5s ease-in-out 0.2s;
-  -o-transition: opacity 0.5s ease-in-out 0.2s;
-  -moz-transition: opacity 0.5s ease-in-out 0.2s;
-  -webkit-transition: opacity 0.5s ease-in-out 0.2s;
+  transition: opacity 0.1s ease-in-out 0.2s;
+  -o-transition: opacity 0.1s ease-in-out 0.2s;
+  -moz-transition: opacity 0.1s ease-in-out 0.2s;
+  -webkit-transition: opacity 0.1s ease-in-out 0.2s;
 }
+*/
 
 .to-build {
   opacity: 0;

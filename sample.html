@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src=js/raphael-min.js></script>
+	<script src=js/git-canvas.min.js></script>
+	<style>
+	body { font-family: Helvetica; }
+	h2 { margin-left: 3%; }
+	p { margin-left: 6%; }
+	article {
+		padding: 1ex;
+	}
+	article:nth-child(2n+1) {
+		background-color: #eee;
+	}
+	</style>
+</head>
+<body>
+
+<article>
+<h1>(master)$ git commit</h1>
+<p id="c1"></p>
+</article>
+
+<article>
+<h1>(master)$ git checkout -b dev</h1>
+<p id="c2"></p>
+</article>
+
+<article>
+<h1>(master)$ git rebase master</h1>
+<h2>Before:</h2>
+<p id="rebase1"></p>
+<h2>After:</h2>
+<p id="rebase2"></p>
+</article>
+
+<article>
+<h1>(master)$ git merge --ff dev</h1>
+<h2>Before:</h2>
+<p id="c3"></p>
+<h2>After:</h2>
+<p id="c4"></p>
+</article>
+
+<article>
+<h1>(master)$ git merge --no-ff dev</h1>
+<h2>Before:</h2>
+<p id="c5"></p>
+<h2>After:</h2>
+<p id="c6"></p>
+</article>
+
+<article>
+<h1>(master)$ git merge --squash patch-1 patch-2</h1>
+<h2>Before:</h2>
+<p id="c7"></p>
+<h2>After:</h2>
+<p id="c8"></p>
+</article>
+
+<article>
+<h1>Multiple Branches</h1>
+<p id="c9"></p>
+</article>
+
+<script>
+(function(){
+
+var c = new git_canvas();
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c' },
+	{ hash: 'd' }
+]).draw('c1');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'e', parents: ['b'] },
+	{ hash: 'f', branch: 'dev', parents: ['d'] }
+]).draw('c2');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', parents: ['b'] },
+	{ hash: 'e', branch: 'dev',  parents: ['c'] },
+	{ hash: 'f', parents: ['d'] }
+]).draw('rebase1');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'e' },
+	{ hash: 'f' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', branch: 'dev' }
+]).draw('rebase2');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' }
+]).draw('c3');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c' }
+]).draw('c4');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' }
+]).draw('c5');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', parents: ['b', 'c'] }
+]).draw('c6');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'patch-1' },
+	{ hash: 'd', branch: 'patch-2', parents: ['b'] },
+	{ hash: 'e', branch: 'patch-1', parents: ['c'] }
+]).draw('c7');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c' }
+]).draw('c8');
+
+c.commits([
+	{ hash: 'a' },
+	{ hash: 'b' },
+	{ hash: 'c', branch: 'dev' },
+	{ hash: 'd', branch: 'dev' },
+	{ hash: 'e', branch: 'fixup', parents: [ 'b' ] },
+	{ hash: 'f', parents: [ 'e', 'b' ] },
+	{ hash: 'g', parents: [ 'd', 'f' ] }
+]).draw('c9');
+
+})();
+</script>
+
+</body>
+</html>
